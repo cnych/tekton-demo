@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-and-push  # 构建和推送
+spec:
+  resources:
+    inputs:
+    - name: repo   # 名称
+      type: git   # 类型 git、pullRequest、image、cluster...
+  steps:
+  - name: build-and-push
+    image: cnych/kaniko-executor:v0.22.0
+    env:
+    - name: DOCKER_CONFIG   # 用于kaniko去查找docker的认证信息
+      value: /tekton/home/.docker
+    command:
+    - /kaniko/executor
+    - --dockerfile=Dockerfile
+    - --context=/workspace/repo
+    - --destination=cnych/tekton-test:latest

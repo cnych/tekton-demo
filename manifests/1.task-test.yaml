@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test
+  namespace: default
+spec:
+  resources:
+    inputs:
+    - name: repo  # /workspace/repo
+      type: git
+  steps:
+  - name: run-test
+    image: golang:1.14-alpine
+    workingDir: /workspace/repo
+    command: ["go"]
+    args: ["test"]
+
+
